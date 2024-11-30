@@ -1,0 +1,6 @@
+﻿com o g++  make e demais programas instalados 
+com todos os arquivos no mesmo diretório
+digite "make" neste diretório 
+para cada regra você pode digitar make e nome da regra ex. make cppcheck
+
+fazer um git commit para cada teste ou código adicionado 
