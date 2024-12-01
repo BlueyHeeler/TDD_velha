@@ -7,6 +7,11 @@ int VerificaDiagonal(int row, int column,
 	return (row == column && velha[row][column] == jogador);
 }
 
+int VerificaDiagonalSec(int row, int column,
+							   vector<vector<int>> velha, int jogador) {
+	return (row + column == 2) && velha[row][column] == jogador;
+}
+
 int VerificaFileira(int row, int column,
 					vector<vector<int>> velha, int jogador) {
 	return velha[row][column] == jogador;
@@ -17,8 +22,15 @@ int VerificaColuna(int column, int row,
 	return velha[column][row] == jogador;
 }
 
+int Vitoria(int coluna, int fileira, int diagonal1, int diagonal2){
+	if(coluna == 3 || fileira == 3 || diagonal1 == 3 || diagonal2 == 3)
+		return 1;
+	return 0;
+}
+
 int VerificaVelha(vector<vector<int>> velha) {
-	int diagonal = 0;
+	int diagonal1 = 0;
+	int diagonal2 = 0;
 	int coluna = 0;
 	int fileira = 0;
 
@@ -26,7 +38,10 @@ int VerificaVelha(vector<vector<int>> velha) {
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 3; column++) {
 				if (VerificaDiagonal(row, column, velha, jogador))
-					diagonal++;
+					diagonal1++;
+
+				if (VerificaDiagonalSec(row, column, velha, jogador))
+					diagonal2++;
 
 				if (VerificaFileira(row, column, velha, jogador))
 					fileira++;
@@ -35,17 +50,18 @@ int VerificaVelha(vector<vector<int>> velha) {
 					coluna++;
 			}
 
-			if (fileira == 3 || coluna == 3)
+			if (Vitoria(coluna, fileira, diagonal1, diagonal2))
 				return jogador;
 
 			coluna = 0;
 			fileira = 0;
 		}
 
-		if (diagonal == 3)
+		if (Vitoria(coluna, fileira, diagonal1, diagonal2))
 			return jogador;
 
-		diagonal = 0;
+		diagonal1 = 0;
+		diagonal2 = 0;
 	}
 
 	return 0;
