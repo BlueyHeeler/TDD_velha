@@ -54,4 +54,32 @@ TEST_CASE( "Testa velha", "[single-file]" ) {
 	{1, 0, 0}
 	});
 	REQUIRE( VerificaVelha(teste4.getJogo()) == 1);
+
+	Jogo teste5({
+	{2, 1, 1},
+	{2, 0, 1},
+	{2, 0, 0}
+	});
+	REQUIRE( VerificaVelha(teste5.getJogo()) == 2);
+
+	Jogo teste6({
+	{2, 1, 2},
+	{1, 2, 1},
+	{2, 0, 0}
+	});
+	REQUIRE( VerificaVelha(teste6.getJogo()) == 2);
+
+	Jogo teste7({
+	{2, 1, 2},
+	{1, 1, 2},
+	{1, 2, 1}
+	});
+	REQUIRE( VerificaVelha(teste7.getJogo()) == 0);
+
+	Jogo teste8({
+	{1, 0, 0},
+	{0, 0, 0},
+	{0, 0, 0}
+	});
+	REQUIRE( VerificaVelha(teste8.getJogo()) == -1);
 }
