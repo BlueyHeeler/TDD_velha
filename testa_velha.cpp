@@ -82,4 +82,12 @@ TEST_CASE( "Testa velha", "[single-file]" ) {
 	{0, 0, 0}
 	});
 	REQUIRE( VerificaVelha(teste8.getJogo()) == -1);
+
+	Jogo teste9({
+	{1, 1, 1},
+	{2, 0, 0},
+	{0, 0, 0}
+	});
+	REQUIRE( VerificaVelha(teste9.getJogo()) == -2);
+
 }
