@@ -39,6 +39,6 @@ valgrind: testa_velha
 
 
 clean:
-	rm -rf *.o *.exe *.gc* testa_velha 
+	del *.o *.exe *.gc* testa_velha
 	
 	
