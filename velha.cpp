@@ -56,6 +56,8 @@ int VerificaVelha(const vector<vector<int>> velha) {
 	int fileira = 0;
 	int contJogador1 = 0;
 	int contJogador2 = 0;
+	bool jogador1_ganhou = false;
+	bool jogador2_ganhou = false;
 
 	ContadorDeJogadores(velha, contJogador1, contJogador2);
 	if(JogoInvalido(contJogador1, contJogador2))
