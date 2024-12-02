@@ -56,10 +56,14 @@ int VerificaVelha(const vector<vector<int>> velha) {
 	int fileira = 0;
 	int contJogador1 = 0;
 	int contJogador2 = 0;
+	int vitoriaJogador1 = 0;
+	int vitoriaJogador2 = 0;
 
 	ContadorDeJogadores(velha, contJogador1, contJogador2);
+
 	if(JogoInvalido(contJogador1, contJogador2))
 		return -2;
+
 	contJogador1 = 0;
 	contJogador2 = 0;
 
@@ -79,15 +83,19 @@ int VerificaVelha(const vector<vector<int>> velha) {
 					coluna++;
 			}
 
-			if (Vitoria(coluna, fileira, diagonal1, diagonal2))
-				return jogador;
+			if (Vitoria(coluna, fileira, diagonal1, diagonal2)){
+				if(jogador == 1) vitoriaJogador1 = 1;
+				else vitoriaJogador2 = 1;
+			}
 
 			coluna = 0;
 			fileira = 0;
 		}
 
-		if (Vitoria(coluna, fileira, diagonal1, diagonal2))
-			return jogador;
+		if (Vitoria(coluna, fileira, diagonal1, diagonal2)){
+			if(jogador == 1) vitoriaJogador1 = 1;
+			else vitoriaJogador2 = 1;
+		}
 
 		diagonal1 = 0;
 		diagonal2 = 0;
@@ -95,7 +103,11 @@ int VerificaVelha(const vector<vector<int>> velha) {
 
 	ContadorDeJogadores(velha, contJogador1, contJogador2);
 
-	if((contJogador1 + contJogador2) <= 8)
+	if (vitoriaJogador1 && vitoriaJogador2) return -2;
+	else if (vitoriaJogador1) return 1;
+	else if (vitoriaJogador2) return 2;
+
+	if ((contJogador1 + contJogador2) <= 8)
 		return -1;
 
 	return 0;

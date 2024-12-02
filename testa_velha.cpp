@@ -90,4 +90,11 @@ TEST_CASE("Testa velha", "[single-file]" ) {
 	});
 	REQUIRE(VerificaVelha(teste9.getJogo()) == -2);
 
+	Jogo teste10({
+	{1, 1, 1},
+	{2, 2, 2},
+	{0, 0, 0}
+	});
+	REQUIRE(VerificaVelha(teste10.getJogo()) == -2);
+
 }
