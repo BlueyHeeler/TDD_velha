@@ -8,7 +8,7 @@ int VerificaDiagonal(int row, int column,
 }
 
 int VerificaDiagonalSec(int row, int column,
-							   vector<vector<int>> velha, int jogador) {
+						vector<vector<int>> velha, int jogador) {
 	return (row + column == 2) && velha[row][column] == jogador;
 }
 
@@ -94,8 +94,6 @@ int VerificaVelha(const vector<vector<int>> velha) {
 	}
 
 	ContadorDeJogadores(velha, contJogador1, contJogador2);
-
-	if(JogoIndefinido(contJogador1, contJogador2))
 
 	if((contJogador1 + contJogador2) <= 8)
 		return -1;
