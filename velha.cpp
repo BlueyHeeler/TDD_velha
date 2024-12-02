@@ -22,23 +22,24 @@ int VerificaColuna(int column, int row,
 	return velha[column][row] == jogador;
 }
 
-int Vitoria(int coluna, int fileira, int diagonal1, int diagonal2){
+int Vitoria(int coluna, int fileira, int diagonal1, int diagonal2) {
 	if(coluna == 3 || fileira == 3 || diagonal1 == 3 || diagonal2 == 3)
 		return 1;
 	return 0;
 }
 
-int JogoInvalido(int contJogador1, int contJogador2){
+int JogoInvalido(int contJogador1, int contJogador2) {
 	return abs(contJogador1 - contJogador2) >= 2;
 }
 
-int JogoIndefinido(int contJogador1, int contJogador2){
+int JogoIndefinido(int contJogador1, int contJogador2) {
 	return contJogador1 + contJogador2 <= 8;
 }
 
-void ContadorDeJogadores(vector<vector<int>> velha, int &contJogador1, int &contJogador2){
-	for (vector<int> rowVelha: velha){
-		for (int tipoJogado: rowVelha){
+void ContadorDeJogadores(const vector<vector<int>> velha,
+						int &contJogador1, int &contJogador2) {
+	for (vector<int> rowVelha: velha) {
+		for (int tipoJogado: rowVelha) {
 
 			if(tipoJogado == 1)
 				contJogador1 += 1;
@@ -48,7 +49,7 @@ void ContadorDeJogadores(vector<vector<int>> velha, int &contJogador1, int &cont
 	}
 }
 
-int VerificaVelha(vector<vector<int>> velha) {
+int VerificaVelha(const vector<vector<int>> velha) {
 	int diagonal1 = 0;
 	int diagonal2 = 0;
 	int coluna = 0;
@@ -91,9 +92,12 @@ int VerificaVelha(vector<vector<int>> velha) {
 		diagonal1 = 0;
 		diagonal2 = 0;
 	}
+
 	ContadorDeJogadores(velha, contJogador1, contJogador2);
 
 	if(JogoIndefinido(contJogador1, contJogador2))
+
+	if((contJogador1 + contJogador2) <= 8)
 		return -1;
 
 	return 0;
