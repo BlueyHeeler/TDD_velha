@@ -1,3 +1,4 @@
+// Copyright 2024 <Erick>
 #include "velha.hpp"
 #include <bits/stdc++.h>
 using namespace std;
@@ -28,15 +29,23 @@ int Vitoria(int coluna, int fileira, int diagonal1, int diagonal2) {
 	return 0;
 }
 
-int JogoInvalido(int contJogador1, int contJogador2) {
+int JogoInvalidoPorQuantDeMov(int &contJogador1, int &contJogador2) {
 	return abs(contJogador1 - contJogador2) >= 2;
+}
+
+int JogoInvalidoAmbosVenc(int vitoriaJogador1, int vitoriaJogador2){
+	return (vitoriaJogador1 && vitoriaJogador2);
 }
 
 int JogoIndefinido(int contJogador1, int contJogador2) {
 	return contJogador1 + contJogador2 <= 8;
 }
 
-void ContadorDeJogadores(const vector<vector<int>> velha,
+int Empate(int contJogador1, int contJogador2, int vitoriaJogador1, int vitoriaJogador2){
+	return (contJogador1 + contJogador2 == 9) && !(vitoriaJogador1 || vitoriaJogador2);
+}
+
+void ContadorDeJogadas(const vector<vector<int>> velha,
 						int &contJogador1, int &contJogador2) {
 	for (vector<int> rowVelha: velha) {
 		for (int tipoJogado: rowVelha) {
@@ -49,25 +58,10 @@ void ContadorDeJogadores(const vector<vector<int>> velha,
 	}
 }
 
-int VerificaVelha(const vector<vector<int>> velha) {
-	int diagonal1 = 0;
-	int diagonal2 = 0;
-	int coluna = 0;
-	int fileira = 0;
-	int contJogador1 = 0;
-	int contJogador2 = 0;
-	int vitoriaJogador1 = 0;
-	int vitoriaJogador2 = 0;
-
-	ContadorDeJogadores(velha, contJogador1, contJogador2);
-
-	if(JogoInvalido(contJogador1, contJogador2))
-		return -2;
-
-	contJogador1 = 0;
-	contJogador2 = 0;
-
-	for (int jogador = 1; jogador <= 2; jogador++) {
+void VerificaVencedor(vector<vector<int>> velha, int &diagonal1,
+					  int &diagonal2, int &fileira, int &coluna,
+					  int &vitoriaJogador1, int &vitoriaJogador2) {
+	for(int jogador = 1; jogador <= 2; jogador++){
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 3; column++) {
 				if (VerificaDiagonal(row, column, velha, jogador))
@@ -91,26 +85,43 @@ int VerificaVelha(const vector<vector<int>> velha) {
 			coluna = 0;
 			fileira = 0;
 		}
-
-		if (Vitoria(coluna, fileira, diagonal1, diagonal2)){
-			if(jogador == 1) vitoriaJogador1 = 1;
-			else vitoriaJogador2 = 1;
-		}
-
 		diagonal1 = 0;
 		diagonal2 = 0;
 	}
+}
 
-	ContadorDeJogadores(velha, contJogador1, contJogador2);
+int VerificaVelha(const vector<vector<int>> velha) {
+	int diagonal1 = 0;
+	int diagonal2 = 0;
+	int coluna = 0;
+	int fileira = 0;
+	int contJogador1 = 0;
+	int contJogador2 = 0;
+	int vitoriaJogador1 = 0;
+	int vitoriaJogador2 = 0;
 
-	if (vitoriaJogador1 && vitoriaJogador2) return -2;
-	else if (vitoriaJogador1) return 1;
-	else if (vitoriaJogador2) return 2;
+	ContadorDeJogadas(velha, contJogador1, contJogador2);
 
-	if ((contJogador1 + contJogador2) <= 8)
+	if(JogoInvalidoPorQuantDeMov(contJogador1, contJogador2))
+		return -2;
+
+	VerificaVencedor(velha, diagonal1, diagonal2, fileira,
+						coluna, vitoriaJogador1, vitoriaJogador2);
+
+	if (JogoInvalidoAmbosVenc(vitoriaJogador1, vitoriaJogador2))
+		return -2;
+	else if (vitoriaJogador1)
+		return 1;
+	else if (vitoriaJogador2)
+		return 2;
+
+	if (JogoIndefinido(contJogador1, contJogador2))
 		return -1;
 
-	return 0;
+	if (Empate(contJogador1, contJogador2, vitoriaJogador1, vitoriaJogador2))
+		return 0;
+
+	return -99;
 }
 
 
