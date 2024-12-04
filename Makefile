@@ -19,11 +19,13 @@ cpplint: testa_velha.cpp   velha.cpp velha.hpp
 	cpplint --filter=-whitespace/tab testa_velha.cpp velha.cpp
 
 	
-gcov: testa_velha.cpp   velha.cpp velha.hpp 
-	g++ -std=c++11 -Wall -fprofile-arcs -ftest-coverage -c velha.cpp
-	g++ -std=c++11 -Wall -fprofile-arcs -ftest-coverage velha.o testa_velha.cpp -o testa_velha
-	./testa_velha
-	gcov *.cpp	
+gcov: testa_velha.cpp   velha.cpp velha.hpp
+	mkdir coverage
+	g++ -std=c++11 -Wall -fprofile-arcs -ftest-coverage -o coverage/velha.o -c velha.cpp
+	g++ -std=c++11 -Wall -fprofile-arcs -ftest-coverage -o coverage/testa_velha coverage/velha.o testa_velha.cpp
+	./coverage/testa_velha
+	gcov -o coverage/ *.cpp
+
 	 
 debug: testa_velha.cpp   velha.cpp velha.hpp 
 	g++ -std=c++11 -Wall -g -c velha.cpp
@@ -39,6 +41,7 @@ valgrind: testa_velha
 
 
 clean:
-	rm -rf *.o *.exe *.gc* testa_velha 
+	del /f /q *.o *.exe *.gc* 2>nul || exit 0
+
 	
 	
