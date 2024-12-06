@@ -1,5 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
+
 int VerificaVelha( vector<vector<int>> velha );
 
 void VerificaVencedor(vector<vector<int>> velha, int &diagonal1,

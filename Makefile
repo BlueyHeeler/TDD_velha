@@ -1,47 +1,57 @@
-all: testa_velha.cpp   velha.cpp velha.hpp velha.o
-	g++ -std=c++11 -Wall velha.o testa_velha.cpp -o testa_velha
-	./testa_velha
-	#use comentario se necessario
+# Definindo o compilador e as flags
+CC = g++
+CXXFLAGS = -std=c++11 -Wall
+OBJ_DIR = coverage
 
-compile: testa_velha.cpp   velha.cpp velha.hpp velha.o
-	g++ -std=c++11 -Wall velha.o testa_velha.cpp -o testa_velha
+# Alvo default
+all: testa_velha
 
-velha.o : velha.cpp velha.hpp
-	g++ -std=c++11 -Wall -c velha.cpp
-	
-testa_velha: 	testa_velha.cpp   velha.cpp velha.hpp velha.o
-	g++ -std=c++11 -Wall velha.o testa_velha.cpp -o testa_velha
-	
-test: testa_velha	
+# Compilar e rodar o programa
+testa_velha: velha.o testa_velha.cpp velha.hpp
+	$(CC) $(CXXFLAGS) velha.o testa_velha.cpp -o testa_velha
 	./testa_velha
-	
-cpplint: testa_velha.cpp   velha.cpp velha.hpp
+
+# Gerar o objeto da velha
+velha.o: velha.cpp velha.hpp
+	$(CC) $(CXXFLAGS) -c velha.cpp
+
+# Rodar os testes
+test: testa_velha
+	./testa_velha
+
+# Verificar o código com cpplint
+cpplint: testa_velha.cpp velha.cpp velha.hpp
 	cpplint --filter=-whitespace/tab testa_velha.cpp velha.cpp
 
-	
-gcov: testa_velha.cpp   velha.cpp velha.hpp
-	mkdir coverage
-	g++ -std=c++11 -Wall -fprofile-arcs -ftest-coverage -o coverage/velha.o -c velha.cpp
-	g++ -std=c++11 -Wall -fprofile-arcs -ftest-coverage -o coverage/testa_velha coverage/velha.o testa_velha.cpp
-	./coverage/testa_velha
-	gcov -o coverage/ *.cpp
+# Cobertura de código com gcov
+gcov: velha.cpp testa_velha.cpp velha.hpp
+	mkdir -p $(OBJ_DIR)
+	$(CC) $(CXXFLAGS) -fprofile-arcs -ftest-coverage -o $(OBJ_DIR)/velha.o -c velha.cpp
+	$(CC) $(CXXFLAGS) -fprofile-arcs -ftest-coverage -o $(OBJ_DIR)/testa_velha $(OBJ_DIR)/velha.o testa_velha.cpp
+	./$(OBJ_DIR)/testa_velha
+	gcov -o $(OBJ_DIR) *.cpp
 
-	 
-debug: testa_velha.cpp   velha.cpp velha.hpp 
-	g++ -std=c++11 -Wall -g -c velha.cpp
-	g++ -std=c++11 -Wall  -g velha.o testa_velha.cpp -o testa_velha
+# Depuração com gdb
+debug: testa_velha.cpp velha.cpp velha.hpp
+	$(CC) $(CXXFLAGS) -g -c velha.cpp
+	$(CC) $(CXXFLAGS) -g velha.o testa_velha.cpp -o testa_velha
 	gdb testa_velha
-	
-	
-cppcheck: testa_velha.cpp   velha.cpp velha.hpp
-	cppcheck  --enable=warning .
 
+# Verificar com cppcheck
+cppcheck: testa_velha.cpp velha.cpp velha.hpp
+	cppcheck --enable=warning .
+
+# Verificar com Valgrind
 valgrind: testa_velha
-	valgrind --leak-check=yes --log-file=valgrind.rpt testa_velha
+	valgrind --leak-check=yes --log-file=valgrind.rpt ./testa_velha
 
-
+# Limpar arquivos temporários
 clean:
-	del /f /q *.o *.exe *.gc* 2>nul || exit 0
+	@if [ "$(OS)" = "Windows_NT" ]; then \
+		del /f /q *.o *.exe *.gc* 2>nul || exit 0; \
+	else \
+		rm -f *.o *.exe *.gc*; \
+	fi
 
 	
 	
